@@ -1,4 +1,5 @@
-from django.db import models
+from django.db import models, connection
+
 
 NULLABLE = {'blank': True, 'null': True}
 
@@ -13,6 +14,10 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+    @classmethod
+    def restart_id(cls):
+        with connection.cursor() as cur:
+            cur.execute(f'TRUNCATE TABLE {cls._meta.db_table} RESTART IDENTITY CASCADE')
 
 
 class Product(models.Model):
