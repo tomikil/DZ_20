@@ -23,7 +23,6 @@ class Product(models.Model):
     price = models.FloatField(max_length=15, verbose_name='Цена за покупку')
     created_at = models.DateTimeField(verbose_name='Дата создания')
     updated_at = models.DateTimeField(**NULLABLE, verbose_name='Дата последнего изменения')
-    manufactured_at = models.DateTimeField(**NULLABLE, verbose_name='Дата производства продукта')
 
     class Meta:
         verbose_name = 'Продукт'
