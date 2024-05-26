@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'store/base.html' %}
 {% load my_tags %}
 {% block content %}
     <div class="album py-5 bg-light">
@@ -6,19 +6,19 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="card mb-4 box-shadow">
-                        <img src="{{ products.images | media_filter }}">
+                        <img src="{{ object.images | media_filter }}">
                         <div class="card-body">
                             <p class="card-text">
-                                {{ products.category }}: {{ products.name }}<br>
-                                {{ products.description }}<br>
-                                {{ products.price }} &#8381/кг <br>
-                                {{ products.created_at }}
+                                {{ object.category }}: {{ object.name }}<br>
+                                {{ object.description }}<br>
+                                {{ object.price }} &#8381/кг <br>
+
                             </p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'store:index' %}">Назад</a>
+                                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'store:list' %}">Назад</a>
                                 </div>
-                                <small class="text-muted">9 mins</small>
+                                <small class="text-muted">{{ object.created_at }}</small>
                             </div>
                         </div>
                     </div>
