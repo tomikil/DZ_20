@@ -5,31 +5,22 @@ from pytils.translit import slugify
 from blogs.models import Blogs
 
 
+
 class BlogsCreateView(CreateView):
     model = Blogs
     fields = ('title', 'content', 'images', 'is_published')
     success_url = reverse_lazy('blogs:list')
 
     def form_valid(self, form):
-        if form.is_valid:
-            new_blog = form.save()
-            new_blog.slug = slugify(new_blog.title)
-            new_blog.save()
-
+        new_blog = form.save(commit=False)
+        new_blog.slug = slugify(new_blog.title)
+        new_blog.save()
         return super().form_valid(form)
 
 
 class BlogsUpdateView(UpdateView):
     model = Blogs
     fields = ('title', 'content', 'images', 'is_published')
-
-    def form_valid(self, form):
-        if form.is_valid:
-            new_blog = form.save()
-            new_blog.slug = slugify(new_blog.title)
-            new_blog.save()
-
-        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('blogs:view', args=[self.kwargs.get('pk')])
