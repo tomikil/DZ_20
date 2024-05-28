@@ -13,4 +13,4 @@ urlpatterns = [
     path('view/<int:pk>/', BlogsDetailView.as_view(), name='view'),
     path('edit/<int:pk>/', BlogsUpdateView.as_view(), name='edit'),
     path('delete/<int:pk>/', BlogsDeleteView.as_view(), name='delete')
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
