@@ -1,6 +1,9 @@
 {% extends 'store/base.html' %}
 {% load my_tags %}
 {% block content %}
+<div class="col-12  mb-5">
+    <a class="btn btn-outline-primary" href="{% url 'store:create' %}">Добавить товар</a>
+</div>
 <div class="album py-5 bg-light">
     <div class="container">
 
@@ -28,7 +31,7 @@
                                     delete
                                 </a>
                             </div>
-                            <small class="text-muted">9 mins</small>
+                            <small class="text-muted"> {{ object.created_at }}</small>
                         </div>
                     </div>
                 </div>
