@@ -16,7 +16,18 @@
                         <p class="card-text">
                             {{ object.name }}<br>
                             {{ object.description | truncatechars:100 }}<br>
-                            {{ object.price }} &#8381/кг
+                            {{ object.price }} &#8381/кг<br><br>
+
+                                {% for version in object.product.all %}
+                                {% if version.sign_version == True %}
+
+
+                                Номер версии: {{version.numbers_version}}<br>
+                                Наименование версии: {{version.name_version}}<br>
+                                Состояние: активна
+                                <hr class="btn-primary">
+                                {% endif %}
+                                {% endfor %}
 
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
@@ -24,10 +35,10 @@
                                 <a class="btn btn-sm btn-outline-secondary" href="{% url 'store:view' object.pk %}">
                                     view
                                 </a>
-                                 <a class="btn btn-sm btn-outline-secondary" href="{% url 'store:edit' object.pk %}">
+                                <a class="btn btn-sm btn-outline-secondary" href="{% url 'store:edit' object.pk %}">
                                     edit
                                 </a>
-                                 <a class="btn btn-sm btn-outline-secondary" href="{% url 'store:delete' object.pk %}">
+                                <a class="btn btn-sm btn-outline-secondary" href="{% url 'store:delete' object.pk %}">
                                     delete
                                 </a>
                             </div>
