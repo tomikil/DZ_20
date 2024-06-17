@@ -1,12 +1,12 @@
 from django.db import models, connection
+from django.utils import timezone
 
-
-NULLABLE = {'blank': True, 'null': True}
+from users.models import User
 
 
 class Category(models.Model):
     name = models.CharField(max_length=70, verbose_name='Наименование категории')
-    description = models.TextField(verbose_name='Описание категории', **NULLABLE)
+    description = models.TextField(verbose_name='Описание категории', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Категория'
@@ -14,6 +14,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
     @classmethod
     def restart_id(cls):
         with connection.cursor() as cur:
@@ -23,11 +24,12 @@ class Category(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=70, verbose_name='Наименование продукта')
     description = models.TextField(verbose_name='Описание продукта')
-    images = models.ImageField(upload_to='product/', verbose_name='Изображение', **NULLABLE)
+    images = models.ImageField(upload_to='product/', verbose_name='Изображение', blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория', related_name='products')
     price = models.FloatField(max_length=15, verbose_name='Цена за покупку')
-    created_at = models.DateTimeField(verbose_name='Дата создания')
-    updated_at = models.DateTimeField(**NULLABLE, verbose_name='Дата последнего изменения')
+    created_at = models.DateTimeField(default=timezone.now, verbose_name="Дата создания")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата последнего изменения')
+    owner = models.ForeignKey(User, verbose_name='Владелец', blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = 'Продукт'
@@ -48,7 +50,6 @@ class Version(models.Model):
     class Meta:
         verbose_name = 'Версия'
         verbose_name_plural = 'Версии'
-
 
     def __str__(self):
         return self.numbers_version
