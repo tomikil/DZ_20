@@ -1,22 +1,27 @@
 {% extends 'store/base.html' %}
 {% load my_tags %}
+<title>Магазин</title>
 {% block content %}
+<h1 class="text-center">Магазин</h1>
 <div class="col-12  mb-5">
+    {% if user.is_authenticated %}
     <a class="btn btn-outline-primary" href="{% url 'store:create' %}">Добавить товар</a>
+    {% endif %}
 </div>
 <div class="album py-5 bg-light">
     <div class="container">
 
         <div class="row">
             {% for object in object_list %}
-            <div class="col-md-4">
-                <div class="card mb-4 box-shadow">
+            <div class="col-md-5">
+                <div class="card mb-5 box-shadow">
                     <img src="{{ object.images | media_filter }}">
                     <div class="card-body">
+                        Автор: {{ object.owner.first_name }} {{ object.owner.last_name }}
                         <p class="card-text">
-                            {{ object.name }}<br>
-                            {{ object.description | truncatechars:100 }}<br>
-                            {{ object.price }} &#8381/кг<br><br>
+                            Наименование: {{ object.name }}<br>
+                            Описание: {{ object.description | truncatechars:100 }}<br>
+                            Цена: {{ object.price }} &#8381/кг<br><br>
 
                                 {% for version in object.product.all %}
                                 {% if version.sign_version == True %}
@@ -33,15 +38,18 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <a class="btn btn-sm btn-outline-secondary" href="{% url 'store:view' object.pk %}">
-                                    view
+                                    Просмотр
                                 </a>
+                                {% if user.is_authenticated %}
                                 <a class="btn btn-sm btn-outline-secondary" href="{% url 'store:edit' object.pk %}">
-                                    edit
+                                    Редактировать
                                 </a>
                                 <a class="btn btn-sm btn-outline-secondary" href="{% url 'store:delete' object.pk %}">
-                                    delete
+                                    Удалить
                                 </a>
+                                {% endif %}
                             </div>
+                            <br>
                             <small class="text-muted"> {{ object.created_at }}</small>
                         </div>
                     </div>
