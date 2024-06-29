@@ -40,7 +40,7 @@
                                 <a class="btn btn-sm btn-outline-secondary" href="{% url 'store:view' object.pk %}">
                                     Просмотр
                                 </a>
-                                {% if user.is_authenticated %}
+                                {% if perms.store.can_unpublish_product and perms.store.change_description_product and perms.store.change_category_product or user == object.owner %}
                                 <a class="btn btn-sm btn-outline-secondary" href="{% url 'store:edit' object.pk %}">
                                     Редактировать
                                 </a>

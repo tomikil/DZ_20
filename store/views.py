@@ -1,10 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
-from store.forms import ProductForm, VersionForm
+from store.forms import ProductForm, VersionForm, ProductModeratorForm
 from store.models import Product, Version
 
 
@@ -12,7 +11,6 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('store:list')
-
 
     def form_valid(self, form):
         product = form.save()
@@ -48,15 +46,27 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         else:
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        if user.has_perm('store.can_unpublish_product') and user.has_perm('store.change_description_product') and user.has_perm('store.change_category_product'):
+            return ProductModeratorForm
+        raise PermissionDenied
+
 
 class ProductListView(ListView):
     model = Product
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset(*args, **kwargs)
+        return queryset.filter(is_published=True)
 
 
 class ProductDetailView(DetailView):
     model = Product
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('store:list')

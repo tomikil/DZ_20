@@ -18,6 +18,8 @@
                 </div>
             </div>
         </div>
+        {% if perms.store.can_unpublish_product and perms.store.change_description_product and perms.store.change_category_product %}
+        {% else %}
         {% if object %}
         <div class="col-6">
             <div class="card">
@@ -31,6 +33,7 @@
             </div>
         </div>
         {% else %}
+        {% endif %}
         {% endif %}
     </form>
 </div>

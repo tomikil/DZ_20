@@ -1,13 +1,10 @@
-import random
 import secrets
-
 from django.http import HttpResponseRedirect
 from config.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse_lazy, reverse
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, TemplateView
-
 from users.forms import UserRegisterFrom, UserProfileForm, PasswordRecoveryForm
 from users.models import User
 
