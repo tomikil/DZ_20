@@ -14,7 +14,7 @@ class ProductAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
 
+
 @admin.register(Version)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('numbers_version', 'name_version')
-
