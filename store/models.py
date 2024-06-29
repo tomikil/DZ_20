@@ -30,11 +30,17 @@ class Product(models.Model):
     created_at = models.DateTimeField(default=timezone.now, verbose_name="Дата создания")
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата последнего изменения')
     owner = models.ForeignKey(User, verbose_name='Владелец', blank=True, null=True, on_delete=models.SET_NULL)
+    is_published = models.BooleanField(default=False, verbose_name="Опубликован")
 
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
         ordering = ['category', 'name']
+        permissions = [
+            ('can_unpublish_product', 'Can unpublish product'),
+            ('change_description_product', 'Can change product description'),
+            ('change_category_product', 'Can change product category'),
+        ]
 
     def __str__(self):
         return self.name
