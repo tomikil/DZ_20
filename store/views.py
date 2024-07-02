@@ -4,7 +4,8 @@ from django.forms import inlineformset_factory
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from store.forms import ProductForm, VersionForm, ProductModeratorForm
-from store.models import Product, Version
+from store.models import Product, Version, Category
+from store.services import get_category_from_cache
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -50,7 +51,8 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         user = self.request.user
         if user == self.object.owner:
             return ProductForm
-        if user.has_perm('store.can_unpublish_product') and user.has_perm('store.change_description_product') and user.has_perm('store.change_category_product'):
+        if user.has_perm('store.can_unpublish_product') and user.has_perm(
+                'store.change_description_product') and user.has_perm('store.change_category_product'):
             return ProductModeratorForm
         raise PermissionDenied
 
@@ -70,3 +72,11 @@ class ProductDetailView(DetailView):
 class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('store:list')
+
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = 'store/category_list.html'
+
+    def get_queryset(self):
+        return get_category_from_cache
